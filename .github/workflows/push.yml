@@ -29,4 +29,4 @@ jobs:
           echo "files=$FILES" >> $GITHUB_OUTPUT
  
       - name: Use the file list
-        run: echo "Files changed:  ${{ steps.changed.outputs.files }}"
+        run: echo "Files changed  ${{ steps.changed.outputs.files }}"
