@@ -1,0 +1,19 @@
+name: Trigger on File Change
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name
+    paths:
+      - "path/to/file.txt"  # Replace with the actual file path
+      - "path/to/directory/**"  # To watch all files in a directory
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run a simple script
+        run: echo "This workflow ran because the specified file was modified!"
