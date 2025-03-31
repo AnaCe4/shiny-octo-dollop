@@ -3,10 +3,9 @@ name: Trigger on File Change
 on:
   pull_request:
     branches:
-      - main  # Replace with your branch name
+      - main
     paths:
-      - "rules/**"  # Replace with the actual file path including all files
-     
+      - "rules/**"
 
 jobs:
   build:
@@ -14,19 +13,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Run a simple script
-        run: echo "This workflow ran because the specified file was modified!"
+        with:
+          fetch-depth: 2  # Ensure we fetch enough history for git diff
 
       - name: Get list of changed files
         id: changed
         run: |
           echo "Finding changed files..."
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- rules/**/)
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- 'rules/**')
           echo "$CHANGED_FILES"
-          # Join as comma-separated string
           FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)
-          echo "files=$FILES" >> $GITHUB_OUTPUT
- 
+          echo "files=$FILES" >> "$GITHUB_ENV"
+
       - name: Use the file list
-        run: echo "Files changed  ${{ steps.changed.outputs.files }}"
+        run: echo "Files changed: ${{ env.files }}"
