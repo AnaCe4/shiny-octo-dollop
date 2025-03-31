@@ -17,3 +17,16 @@ jobs:
 
       - name: Run a simple script
         run: echo "This workflow ran because the specified file was modified!"
+
+      - name: Get list of changed files
+        id: changed
+        run: |
+          echo "Finding changed files..."
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- rules/**/)
+          echo "$CHANGED_FILES"
+          # Join as comma-separated string
+          FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+ 
+      - name: Use the file list
+        run: echo "Files changed:  ${{ steps.changed.outputs.files }}"
