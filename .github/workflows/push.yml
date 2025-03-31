@@ -5,8 +5,8 @@ on:
     branches:
       - main  # Replace with your branch name
     paths:
-      - "path/to/file.txt"  # Replace with the actual file path
-      - "path/to/directory/**"  # To watch all files in a directory
+      - "rules"  # Replace with the actual file path
+     
 
 jobs:
   build:
