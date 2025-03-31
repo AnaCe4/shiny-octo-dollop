@@ -1,7 +1,7 @@
 name: Trigger on File Change
 
 on:
-  push:
+  pull_request:
     branches:
       - main  # Replace with your branch name
     paths:
