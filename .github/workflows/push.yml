@@ -26,4 +26,7 @@ jobs:
           echo "files=$FILES" >> "$GITHUB_ENV"
 
       - name: Use the file list
-        run: echo "Files changed: ${{ env.files }}"
+        run: echo "Files changed: $FILES"
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+
