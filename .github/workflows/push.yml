@@ -22,17 +22,14 @@ jobs:
           echo "Finding changed files..."
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- 'rules/**')
           echo "$CHANGED_FILES"
-          FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)
-          echo "files=$FILES" >> "$GITHUB_ENV"
+          # Set the changed files as output
+          echo "::set-output name=files::$(echo "$CHANGED_FILES" | paste -sd "," -)"
 
       - name: Use the file list
-        run: echo $FILES
-        env:
-          FILES: ${{ steps.changed.outputs.files }}
+        run: echo ${{ steps.changed.outputs.files }}
 
       - name: Send to External API
         run: |
           curl -X POST "https://webhook.site/9b633284-9e93-40cc-9342-80a1cacb9d12" \
             -H "Content-Type: application/json" \
             -d '{"changed_files": "${{ steps.changed.outputs.files }}"}'
-
