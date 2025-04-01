@@ -1,11 +1,9 @@
-name: Trigger on File Change
+name: Trigger on Merge
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    paths:
-      - "rules/**"
 
 jobs:
   build:
@@ -20,7 +18,7 @@ jobs:
         id: changed
         run: |
           echo "Finding changed files..."
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- 'rules/**')
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD -- 'rules/**')
           echo "$CHANGED_FILES"
           # Save the changed files to an environment file
           echo "CHANGED_FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)" >> $GITHUB_ENV
