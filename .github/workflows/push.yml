@@ -30,3 +30,9 @@ jobs:
         env:
           FILES: ${{ steps.changed.outputs.files }}
 
+      - name: Send to External API
+        run: |
+          curl -X POST "https://webhook.site/9b633284-9e93-40cc-9342-80a1cacb9d12" \
+            -H "Content-Type: application/json" \
+            -d '{"changed_files": "${{ steps.changed.outputs.files }}"}'
+
