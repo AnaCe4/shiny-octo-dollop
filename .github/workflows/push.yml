@@ -28,6 +28,6 @@ jobs:
 
       - name: Send to External API
         run: |
-          curl -X POST "https://webhook.site/9e14aef9-bebe-43ce-8560-3cd84753a7cf" \
+          curl -X POST "WEBHOOK_SITE" \
             -H "Content-Type: application/json" \
             -d '{"changed_files": "${{ env.CHANGED_FILES }}"}'
