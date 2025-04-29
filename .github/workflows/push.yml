@@ -8,13 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:  # ✅ Set the secret globally so all steps can access
+      WEBHOOK_SITE: ${{ secrets.WEBHOOK_SITE }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        env: 
-          WEBHOOK_SITE: ${{secrets.WEBHOOK_SITE}}
         with:
-          fetch-depth: 2  # Ensure we fetch enough history for git diff
+          fetch-depth: 2
 
       - name: Get list of changed files
         id: changed
@@ -22,7 +23,6 @@ jobs:
           echo "Finding changed files..."
           CHANGED_FILES=$(git diff --name-only HEAD^ HEAD -- 'rules/**')
           echo "$CHANGED_FILES"
-          # Save the changed files to an environment file
           echo "CHANGED_FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)" >> $GITHUB_ENV
 
       - name: Use the file list
@@ -30,6 +30,7 @@ jobs:
 
       - name: Send to External API
         run: |
-          curl -X POST "WEBHOOK_SITE" \
+          curl -X POST "$WEBHOOK_SITE" \
             -H "Content-Type: application/json" \
-            -d '{"changed_files": "${{ env.CHANGED_FILES }}"}'
+            -d "{\"changed_files\": \"${CHANGED_FILES}\"}"
+
