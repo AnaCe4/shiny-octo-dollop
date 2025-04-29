@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        env: 
+          WEBHOOK_SITE: ${{secrets.WEBHOOK_SITE}}
         with:
           fetch-depth: 2  # Ensure we fetch enough history for git diff
 
